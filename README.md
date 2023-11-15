@@ -5,6 +5,7 @@
 - MacOS 12.0 or later
 
 ## Todo:
-- Quit button
+- ~~Quit button~~
 - Autostart
 - Support touchbar
+- Detect if input is muted at startup
