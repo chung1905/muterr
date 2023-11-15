@@ -36,7 +36,6 @@
 			children = (
 				544F7F472B046ACF003B3EA9 /* Muterr */,
 				544F7F462B046ACF003B3EA9 /* Products */,
-				547B568A2B04794400F4106A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 			usesTabs = 0;
@@ -58,13 +57,6 @@
 				544F7F4F2B046AD0003B3EA9 /* Muterr.entitlements */,
 			);
 			path = Muterr;
-			sourceTree = "<group>";
-		};
-		547B568A2B04794400F4106A /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
