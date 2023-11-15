@@ -12,7 +12,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet var window: NSNull!
 
-    var statusBarItem: NSStatusItem!
+    private let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    private let menu = NSMenu()
+    
     private var isMuted = false
     private var currentVolume = 50
     private let micImg = NSImage(named: NSImage.touchBarAudioInputTemplateName)
@@ -20,13 +22,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSApp.setActivationPolicy(.prohibited)
-        statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
         if let button = statusBarItem.button {
             button.image = micImg
-            button.action = #selector(toggleMute)
-            button.sendAction(on: [.leftMouseUp])
+            button.action = #selector(btnClickAction)
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
+
+        menu.addItem(NSMenuItem(
+            title: "Quit",
+            action: #selector(NSApplication.terminate(_:)),
+            keyEquivalent: "q"
+        ))
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -37,7 +44,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 
-    @objc func toggleMute() {
+    @objc func btnClickAction() {
+        let event = NSApp.currentEvent!
+        if event.type == NSEvent.EventType.rightMouseUp {
+            statusBarItem.menu = menu
+            statusBarItem.button?.performClick(nil)
+        } else {
+            toggleMute()
+        }
+        statusBarItem.menu = nil
+    }
+
+    func toggleMute() {
         isMuted.toggle()
         statusBarItem.button?.image = isMuted ? muteMicImg : micImg
         currentVolume = max(currentVolume, getCurrentVolume()) // Save current volume
@@ -54,7 +72,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         
-        return ret <= 1 ? 0 : ret // if current = 0 or 1, return 0
+        return ret <= 1 ? 0 : ret // if volume is too small, set it to zero
     }
 
     func setVolume(volume: Int) {
