@@ -49,30 +49,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if event.type == NSEvent.EventType.rightMouseUp {
             statusBarItem.menu = menu
             statusBarItem.button?.performClick(nil)
+            statusBarItem.menu = nil
         } else {
             toggleMute()
         }
-        statusBarItem.menu = nil
     }
 
     func toggleMute() {
         isMuted.toggle()
-        statusBarItem.button?.image = isMuted ? muteMicImg : micImg
-        currentVolume = max(currentVolume, getCurrentVolume()) // Save current volume
-        setVolume(volume: isMuted ? 0 : currentVolume)
+        if (isMuted) {
+            statusBarItem.button?.image = muteMicImg
+            currentVolume = getCurrentVolume()
+            setVolume(volume: 0)
+        } else {
+            statusBarItem.button?.image = micImg
+            setVolume(volume: currentVolume)
+        }
     }
 
     func getCurrentVolume() -> Int {
-        var ret = 50
+        var ret = 50 // this should be configurable
         let setInputVolume = "return input volume of (get volume settings)"
         var error: NSDictionary?
         if let scriptObject = NSAppleScript(source: setInputVolume) {
             if let outputString = scriptObject.executeAndReturnError(&error).stringValue {
-                ret = Int(outputString) ?? ret
+                ret = Int(outputString)!
             }
         }
-        
-        return ret <= 1 ? 0 : ret // if volume is too small, set it to zero
+
+        return ret <= 5 ? 0 : ret // if volume is too small, set it to zero
     }
 
     func setVolume(volume: Int) {
