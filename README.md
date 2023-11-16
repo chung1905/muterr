@@ -7,5 +7,7 @@
 ## Todo:
 - ~~Quit button~~
 - ~~Autostart~~
-- Support touchbar
-- Detect if input is muted at startup
+- ~~Detect if input is muted at startup~~
+
+## Backlog:
+- Support touchbar (probably won't do)

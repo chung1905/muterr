@@ -28,21 +28,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSApp.setActivationPolicy(.prohibited)
-
-        if let button = statusBarItem.button {
-            button.image = micImg
-            button.action = #selector(btnClickAction)
-            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+        prepareMenu()
+        if getCurrentVolume() == 0 {
+            isMuted = true
+            statusBarItem.button?.image = muteMicImg
         }
-
-        lalCheckbox.state = LaunchAtLogin.isEnabled ? .on : .off
-        menu.addItem(lalCheckbox)
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(
-            title: "Quit",
-            action: #selector(NSApplication.terminate(_:)),
-            keyEquivalent: "q"
-        ))
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -70,6 +60,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         LaunchAtLogin.isEnabled = lal
     }
 
+    func prepareMenu() {
+        if let button = statusBarItem.button {
+            button.image = micImg
+            button.action = #selector(btnClickAction)
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+        }
+
+        lalCheckbox.state = LaunchAtLogin.isEnabled ? .on : .off
+        menu.addItem(lalCheckbox)
+        menu.addItem(NSMenuItem.separator())
+
+        menu.addItem(NSMenuItem(
+            title: "Quit",
+            action: #selector(NSApplication.terminate(_:)),
+            keyEquivalent: "q"
+        ))
+    }
+    
     func toggleMute() {
         isMuted.toggle()
         if (isMuted) {
