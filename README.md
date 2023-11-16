@@ -7,6 +7,9 @@
 ## Requirements
 - MacOS 12.0 or later
 
+## Download
+- from [Github Release](https://github.com/chung1905/muterr/releases)
+
 ## Todo
 - ~~Quit button~~
 - ~~Autostart~~
@@ -14,3 +17,6 @@
 
 ## Backlog
 - Support touchbar (probably won't do)
+
+## Author writing
+- [https://chungn.com/muterr](https://chungn.com/muterr)
