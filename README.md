@@ -6,6 +6,6 @@
 
 ## Todo:
 - ~~Quit button~~
-- Autostart
+- ~~Autostart~~
 - Support touchbar
 - Detect if input is muted at startup

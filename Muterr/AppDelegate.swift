@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import LaunchAtLogin
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -14,6 +15,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     private let menu = NSMenu()
+    private let lalCheckbox = NSMenuItem(
+        title: "Launch at Login",
+        action: #selector(toggleLaunchAtLogin),
+        keyEquivalent: ""
+    )
     
     private var isMuted = false
     private var currentVolume = 50
@@ -29,6 +35,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
 
+        lalCheckbox.state = LaunchAtLogin.isEnabled ? .on : .off
+        menu.addItem(lalCheckbox)
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(
             title: "Quit",
             action: #selector(NSApplication.terminate(_:)),
@@ -55,15 +64,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @objc func toggleLaunchAtLogin() {
+        let lal = !LaunchAtLogin.isEnabled
+        lalCheckbox.state = lal ? .on : .off
+        LaunchAtLogin.isEnabled = lal
+    }
+
     func toggleMute() {
         isMuted.toggle()
         if (isMuted) {
             statusBarItem.button?.image = muteMicImg
             currentVolume = getCurrentVolume()
-            setVolume(volume: 0)
+            setVolume(0)
         } else {
             statusBarItem.button?.image = micImg
-            setVolume(volume: currentVolume)
+            setVolume(currentVolume)
         }
     }
 
@@ -80,7 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return ret <= 5 ? 0 : ret // if volume is too small, set it to zero
     }
 
-    func setVolume(volume: Int) {
+    func setVolume(_ volume: Int) {
         let scriptSource = """
             set volume input volume \(volume)
         """
@@ -91,4 +106,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 }
-
