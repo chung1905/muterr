@@ -11,6 +11,8 @@
 - from [Github Release](https://github.com/chung1905/muterr/releases)
 
 ## Todo
+- Allow config default volume
+- Show package version in right-click menu
 - ~~Quit button~~
 - ~~Autostart~~
 - ~~Detect if input is muted at startup~~
