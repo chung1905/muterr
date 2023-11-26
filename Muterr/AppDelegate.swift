@@ -22,7 +22,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     )
     
     private var isMuted = false
-    private var currentVolume = 50
+    private var defaultVolume = 50 // this should be configurable
+    private var currentVolume = 0
     private let micImg = NSImage(named: NSImage.touchBarAudioInputTemplateName)
     private let muteMicImg = NSImage(named: NSImage.touchBarAudioInputMuteTemplateName)
 
@@ -86,12 +87,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             setVolume(0)
         } else {
             statusBarItem.button?.image = micImg
-            setVolume(currentVolume)
+            setVolume(currentVolume <= 5 ? defaultVolume : currentVolume)
         }
     }
 
     func getCurrentVolume() -> Int {
-        var ret = 50 // this should be configurable
+        var ret = defaultVolume
         let setInputVolume = "return input volume of (get volume settings)"
         var error: NSDictionary?
         if let scriptObject = NSAppleScript(source: setInputVolume) {
@@ -100,7 +101,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
-        return ret <= 5 ? 0 : ret // if volume is too small, set it to zero
+        return ret
     }
 
     func setVolume(_ volume: Int) {
